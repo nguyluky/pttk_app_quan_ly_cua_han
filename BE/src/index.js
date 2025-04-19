@@ -30,6 +30,8 @@ app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/promotions', require('./routes/promotionRoutes'));
 app.use('/api/coupons', require('./routes/couponRoutes'));
+app.use('/api/shifts', require('./routes/shiftRoutes'));
+app.use('/api/schedules', require('./routes/scheduleRoutes'));
 
 // Tạm thời comment các routes chưa được triển khai
 // app.use('/api/inventory', require('./routes/inventoryRoutes'));
