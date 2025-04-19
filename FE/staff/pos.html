@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS - Quản lý cửa hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Products Section (Left side) -->
+            <div class="col-md-8 p-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <input type="text" id="searchProduct" class="form-control" 
+                                    placeholder="Tìm kiếm sản phẩm...">
+                            </div>
+                            <div class="col-md-6">
+                                <select id="categoryFilter" class="form-select">
+                                    <option value="">Tất cả danh mục</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="productGrid" class="row g-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Section (Right side) -->
+            <div class="col-md-4 p-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <select id="tableSelect" class="form-select">
+                                    <option value="">Chọn bàn</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="cartItems" class="mb-3"></div>
+                        
+                        <div class="input-group mb-3">
+                            <input type="text" id="couponCode" class="form-control" 
+                                placeholder="Mã giảm giá">
+                            <button class="btn btn-outline-secondary" type="button" 
+                                id="btnApplyCoupon">Áp dụng</button>
+                        </div>
+
+                        <textarea id="orderNote" class="form-control mb-3" 
+                            placeholder="Ghi chú đơn hàng"></textarea>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tạm tính:</span>
+                                    <span id="subtotal">0đ</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Giảm giá:</span>
+                                    <span id="discount">-0đ</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Tổng cộng:</strong>
+                                    <strong id="total">0đ</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-grid gap-2">
+                            <button id="btnPayment" class="btn btn-primary">
+                                <i class="bi bi-cash"></i> Thanh toán
+                            </button>
+                            <button id="btnSaveOrder" class="btn btn-outline-primary">
+                                <i class="bi bi-save"></i> Lưu đơn
+                            </button>
+                            <button id="btnClearCart" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Xóa giỏ hàng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thanh toán</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tổng tiền</label>
+                        <input type="text" id="paymentTotal" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phương thức thanh toán</label>
+                        <select id="paymentMethod" class="form-select">
+                            <option value="cash">Tiền mặt</option>
+                            <option value="card">Thẻ</option>
+                            <option value="momo">MoMo</option>
+                            <option value="vnpay">VNPay</option>
+                        </select>
+                    </div>
+                    <div id="cashPaymentGroup">
+                        <div class="mb-3">
+                            <label class="form-label">Tiền khách đưa</label>
+                            <input type="number" id="cashReceived" class="form-control">
+                        </div>
+                        <div id="changeAmount" class="text-end text-primary"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                    <button type="button" id="btnConfirmPayment" class="btn btn-primary">
+                        Xác nhận
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/staff/pos.js"></script>
+</body>
+</html>
