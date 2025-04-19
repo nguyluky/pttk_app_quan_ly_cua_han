@@ -16,20 +16,20 @@ exports.login = async (req, res, next) => {
             throw new Error('Vui lòng nhập email và mật khẩu');
         }
 
-        // Tìm user theo email
+        // Tìm user theo email và bao gồm trường password
         const user = await User.findOne({ email }).select('+password');
-
+        
+        // Nếu không tìm thấy user
         if (!user) {
-            res.status(401);
-            throw new Error('Email hoặc mật khẩu không đúng');
+            res.status(404);
+            throw new Error('Tài khoản không tồn tại');
         }
 
         // Kiểm tra mật khẩu
         const isMatch = await user.matchPassword(password);
-
         if (!isMatch) {
             res.status(401);
-            throw new Error('Email hoặc mật khẩu không đúng');
+            throw new Error('Mật khẩu không đúng');
         }
 
         // Kiểm tra tài khoản có active không
@@ -45,6 +45,7 @@ exports.login = async (req, res, next) => {
             email: user.email,
             role: user.role,
             storeId: user.storeId,
+            phone: user.phone,
             token: generateToken(user._id)
         });
     } catch (error) {

@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000'; // Change this in production
+const API_BASE_URL = 'http://localhost:5000/api'; // Changed to match backend port and added /api prefix
 
 // Axios Configuration
 axios.defaults.baseURL = API_BASE_URL;
@@ -12,6 +12,8 @@ axios.interceptors.request.use(config => {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
+}, error => {
+    return Promise.reject(error);
 });
 
 // Handle unauthorized responses

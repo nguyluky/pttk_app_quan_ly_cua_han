@@ -29,12 +29,12 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     try {
         utils.showLoading();
 
-        const response = await axios.post('/auth/login', {
+        const response = await axios.post('/api/auth/login', {
             email,
             password
         });
 
-        const { token, user } = response.data;
+        const { token, ...user } = response.data;
 
         // Save auth data
         localStorage.setItem('token', token);
@@ -49,7 +49,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
         if (error.response) {
             switch (error.response.status) {
                 case 401:
-                    message = 'Email hoặc mật khẩu không chính xác';
+                    message = 'Mật khẩu không chính xác';
                     break;
                 case 404:
                     message = 'Tài khoản không tồn tại';
@@ -208,6 +208,8 @@ const handleLogout = () => {
 const redirectToUserDashboard = (role) => {
     switch (role) {
         case 'admin':
+            window.location.href = '/admin/dashboard.html';
+            break;
         case 'manager':
             window.location.href = '/admin/dashboard.html';
             break;
