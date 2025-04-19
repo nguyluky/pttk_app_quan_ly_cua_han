@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api'; // Changed to match backend port and added /api prefix
+const API_BASE_URL = 'http://localhost:5000'; // Changed to match backend port and added /api prefix
 
 // Axios Configuration
 axios.defaults.baseURL = API_BASE_URL;
