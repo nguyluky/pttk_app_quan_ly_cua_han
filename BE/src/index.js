@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
 // Đăng ký các routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/stores', require('./routes/storeRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
