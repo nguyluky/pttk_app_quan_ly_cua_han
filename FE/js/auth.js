@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Handle login form submission
 document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -29,7 +29,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     try {
         utils.showLoading();
 
-        const response = await axios.post('/api/auth/login', {
+        const response = await axios.post('/auth/login', {
             email,
             password
         });
@@ -68,7 +68,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 // Handle forgot password form submission
 document.getElementById('forgotPasswordForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const email = document.getElementById('email').value;
 
     if (!utils.validateEmail(email)) {
@@ -81,7 +81,7 @@ document.getElementById('forgotPasswordForm')?.addEventListener('submit', async 
 
         await axios.post('/auth/forgot-password', { email });
         alert('Hướng dẫn đặt lại mật khẩu đã được gửi đến email của bạn');
-        
+
         // Redirect to login page
         window.location.href = '/';
     } catch (error) {
@@ -101,10 +101,10 @@ document.getElementById('forgotPasswordForm')?.addEventListener('submit', async 
 // Handle reset password form submission
 document.getElementById('resetPasswordForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    
+
     if (!utils.validatePassword(password)) {
         alert('Mật khẩu phải có ít nhất 6 ký tự');
         return;
@@ -158,7 +158,7 @@ document.getElementById('resetPasswordForm')?.addEventListener('submit', async (
 // Handle change password form submission
 document.getElementById('changePasswordForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
