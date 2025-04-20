@@ -6,6 +6,8 @@ const { notFound, errorHandler, validationErrorHandler } = require('./middleware
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger');
+const tableRoutes = require('./routes/tableRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 
 // Load biến môi trường
 dotenv.config();
@@ -46,6 +48,8 @@ app.use('/api/promotions', require('./routes/promotionRoutes'));
 app.use('/api/coupons', require('./routes/couponRoutes'));
 app.use('/api/shifts', require('./routes/shiftRoutes'));
 app.use('/api/schedules', require('./routes/scheduleRoutes'));
+app.use('/api/tables', tableRoutes);
+app.use('/api/reservations', reservationRoutes);
 
 // Tạm thời comment các routes chưa được triển khai
 // app.use('/api/inventory', require('./routes/inventoryRoutes'));

@@ -1,5 +1,7 @@
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
+const Table = require('../models/tableModel'); // Thêm model Table
+const Reservation = require('../models/reservationModel'); // Thêm model Reservation
 const asyncHandler = require('express-async-handler');
 
 // @desc    Tạo đơn hàng mới
@@ -16,7 +18,11 @@ const createOrder = asyncHandler(async (req, res) => {
         totalPrice,
         note,
         couponApplied,
-        promotionApplied
+        promotionApplied,
+        customerId,
+        customerName,
+        reservationId,
+        orderType // Thêm các trường này
     } = req.body;
 
     if (!orderItems || orderItems.length === 0) {
@@ -37,10 +43,44 @@ const createOrder = asyncHandler(async (req, res) => {
         note,
         couponApplied,
         promotionApplied,
-        status: 'pending'
+        status: 'pending',
+        customerId,
+        customerName,
+        reservationId,
+        orderType // Thêm các trường này
     });
 
     const createdOrder = await order.save();
+
+    // Xử lý đặt bàn
+    if (orderType === 'dine-in' && tableId) {
+        // Kiểm tra bàn
+        const table = await Table.findById(tableId);
+        if (!table) {
+            res.status(404);
+            throw new Error('Không tìm thấy bàn');
+        }
+
+        // Nếu bàn không có sẵn
+        if (table.status !== 'available' && table.status !== 'reserved') {
+            res.status(400);
+            throw new Error('Bàn không sẵn sàng phục vụ');
+        }
+
+        // Cập nhật trạng thái bàn
+        table.status = 'occupied';
+        table.currentOrderId = createdOrder._id;
+        await table.save();
+    }
+
+    // Xử lý liên kết đặt bàn
+    if (reservationId) {
+        await Reservation.findByIdAndUpdate(reservationId, {
+            orderId: createdOrder._id,
+            status: 'completed'
+        });
+    }
+
     res.status(201).json(createdOrder);
 });
 
@@ -107,6 +147,16 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     } else if (status === 'completed') {
         order.isDelivered = true;
         order.deliveredAt = Date.now();
+
+        // Xử lý trạng thái bàn khi đơn hàng hoàn thành
+        if (order.tableId) {
+            const table = await Table.findById(order.tableId);
+            if (table) {
+                table.status = 'cleaning';
+                table.currentOrderId = null;
+                await table.save();
+            }
+        }
     }
 
     const updatedOrder = await order.save();

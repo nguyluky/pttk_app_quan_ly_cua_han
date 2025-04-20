@@ -317,6 +317,88 @@
  *           type: string
  *           description: ID người tạo lịch
  *
+ *     Table:
+ *       type: object
+ *       required:
+ *         - tableNumber
+ *         - capacity
+ *         - storeId
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID của bàn (MongoDB)
+ *         tableNumber:
+ *           type: string
+ *           description: Số hoặc tên của bàn
+ *         capacity:
+ *           type: number
+ *           description: Sức chứa tối đa của bàn (số người)
+ *         status:
+ *           type: string
+ *           enum: [available, occupied, reserved, cleaning]
+ *           description: Trạng thái hiện tại của bàn
+ *         currentOrderId:
+ *           type: string
+ *           description: ID đơn hàng hiện đang sử dụng bàn
+ *         storeId:
+ *           type: string
+ *           description: ID cửa hàng bàn thuộc về
+ *         location:
+ *           type: string
+ *           description: Vị trí của bàn (ví dụ tầng 1, ngoài trời, v.v.)
+ *         isActive:
+ *           type: boolean
+ *           description: Trạng thái kích hoạt của bàn
+ *
+ *     Reservation:
+ *       type: object
+ *       required:
+ *         - customerName
+ *         - customerPhone
+ *         - tableId
+ *         - reservationDate
+ *         - numberOfGuests
+ *         - storeId
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID của đặt bàn (MongoDB)
+ *         customerName:
+ *           type: string
+ *           description: Tên khách hàng đặt bàn
+ *         customerPhone:
+ *           type: string
+ *           description: Số điện thoại khách hàng
+ *         customerEmail:
+ *           type: string
+ *           description: Email khách hàng
+ *         tableId:
+ *           type: string
+ *           description: ID của bàn được đặt
+ *         reservationDate:
+ *           type: string
+ *           format: date-time
+ *           description: Thời gian đặt bàn
+ *         duration:
+ *           type: number
+ *           description: Thời gian dự kiến sử dụng (tính bằng phút)
+ *         numberOfGuests:
+ *           type: number
+ *           description: Số lượng khách
+ *         status:
+ *           type: string
+ *           enum: [pending, confirmed, completed, cancelled, no-show]
+ *           description: Trạng thái đặt bàn
+ *         specialRequests:
+ *           type: string
+ *           description: Yêu cầu đặc biệt
+ *         storeId:
+ *           type: string
+ *           description: ID cửa hàng
+ *         orderId:
+ *           type: string
+ *           description: ID đơn hàng liên kết với đặt bàn
+ *
  *   responses:
  *     UnauthorizedError:
  *       description: Không có quyền truy cập
