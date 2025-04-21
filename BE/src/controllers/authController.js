@@ -17,8 +17,9 @@ exports.login = async (req, res, next) => {
         }
 
         // Tìm user theo email và bao gồm trường password
-        const user = await User.findOne({ email }).select('+password');
-        
+        const user = await User.findOne({ email: email }).select('+password');
+        console.log(user);
+
         // Nếu không tìm thấy user
         if (!user) {
             res.status(404);
