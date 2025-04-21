@@ -27,18 +27,19 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     }
 
     try {
-        utils.showLoading();
-
         const response = await axios.post('/api/auth/login', {
             email,
             password
         });
 
         const { token, ...user } = response.data;
-
+        
         // Save auth data
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
+
+        // Configure axios defaults after login
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         // Redirect based on role
         redirectToUserDashboard(user.role);
@@ -60,8 +61,6 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
         }
 
         alert(message);
-    } finally {
-        utils.hideLoading();
     }
 });
 

@@ -4,21 +4,15 @@ const cors = require('cors');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS
 app.use(cors());
 
-// Configure API proxy
-app.use('/api', createProxyMiddleware({
-    target: 'http://localhost:5000',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api': '/api' // Keep /api prefix when forwarding to backend
-    },
-    onError: (err, req, res) => {
-        res.status(500).json({ message: 'Proxy Error', error: err.message });
-    }
+// Proxy /api requests to backend server
+app.use('/api', createProxyMiddleware({ 
+    target: process.env.API_URL || 'http://localhost:5000',
+    changeOrigin: true
 }));
 
 // Serve static files
