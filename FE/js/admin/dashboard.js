@@ -1,14 +1,23 @@
 let currentPage = 'dashboard';
+let currentUser = null;
 
 // Initialize dashboard
 async function initializeDashboard() {
     try {
+        // Check if user is admin or manager
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+            window.location.href = '/staff/pos.html';
+            return;
+        }
+        currentUser = user;
+
         // Load user info
-        const user = JSON.parse(localStorage.getItem('user'));
         document.getElementById('userName').textContent = user.name;
 
-        // Set up navigation
+        // Set up navigation and hide restricted features
         setupNavigation();
+        setupFeatureRestrictions();
         
         // Load initial dashboard content
         await loadDashboardContent();
@@ -18,12 +27,38 @@ async function initializeDashboard() {
     }
 }
 
+function setupFeatureRestrictions() {
+    // Hide certain features based on user role
+    if (currentUser.role === 'manager') {
+        // Hide admin-only features
+        document.querySelectorAll('[data-admin-only="true"]').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // Disable admin-only actions in the UI
+        document.querySelectorAll('[data-requires-role="admin"]').forEach(el => {
+            el.disabled = true;
+            el.style.display = 'none';
+        });
+    }
+}
+
 function setupNavigation() {
     // Handle navigation clicks
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', async (e) => {
             e.preventDefault();
             const page = e.target.closest('.nav-link').dataset.page;
+            
+            // Check page access based on role
+            if (currentUser.role === 'manager') {
+                const restrictedPages = ['promotions']; // Add other restricted pages here
+                if (restrictedPages.includes(page)) {
+                    alert('Bạn không có quyền truy cập tính năng này');
+                    return;
+                }
+            }
+            
             await changePage(page);
         });
     });

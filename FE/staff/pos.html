@@ -10,6 +10,21 @@
 </head>
 <body>
     <div class="container-fluid">
+        <!-- Add header with user info and logout -->
+        <div class="row border-bottom mb-3">
+            <div class="col-12 py-2 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">POS - Quản lý cửa hàng</h4>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                        <span id="userName">User</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" id="btnLogout">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <!-- Products Section (Left side) -->
             <div class="col-md-8 p-3">

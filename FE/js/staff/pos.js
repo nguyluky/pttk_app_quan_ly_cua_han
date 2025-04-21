@@ -5,11 +5,31 @@ let state = {
     tables: [],
     cart: [],
     selectedTable: null,
-    appliedCoupon: null
+    appliedCoupon: null,
+    user: null
 };
 
 // Initialize the POS system
 document.addEventListener('DOMContentLoaded', async () => {
+    // Check authentication and load user info
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user || !user.token) {
+        window.location.href = '/';
+        return;
+    }
+    state.user = user;
+    
+    // Display user name
+    document.getElementById('userName').textContent = user.name;
+
+    // Setup logout
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+    });
+
+    // Load data
     await Promise.all([
         loadProducts(),
         loadCategories(),

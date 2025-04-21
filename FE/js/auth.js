@@ -27,13 +27,9 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     }
 
     try {
-<<<<<<< HEAD
-        const response = await axios.post('/api/auth/login', {
-=======
         utils.showLoading();
 
-        const response = await axios.post('/auth/login', {
->>>>>>> 3cdb76fb7d681f49d7248f13bbd50d1f1f74c14f
+        const response = await axios.post('/api/auth/login', {
             email,
             password
         });
@@ -216,8 +212,6 @@ const redirectToUserDashboard = (role) => {
             window.location.href = '/admin/dashboard.html';
             break;
         case 'manager':
-            window.location.href = '/admin/dashboard.html';
-            break;
         case 'staff':
             window.location.href = '/staff/pos.html';
             break;
