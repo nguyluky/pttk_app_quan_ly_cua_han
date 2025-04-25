@@ -68,7 +68,7 @@ function setupNavigation() {
             
             // Check page access based on role
             if (currentUser.role === 'manager') {
-                const restrictedPages = ['promotions']; // Add other restricted pages here
+                const restrictedPages = ['']; // Add other restricted pages here
                 if (restrictedPages.includes(page)) {
                     alert('Bạn không có quyền truy cập tính năng này');
                     return;
