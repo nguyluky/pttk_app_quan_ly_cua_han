@@ -11,33 +11,54 @@ let state = {
 
 // Initialize the POS system
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check authentication and load user info
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user || !user.token) {
-        window.location.href = '/';
-        return;
+    try {
+        // Check authentication and load user info
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const token = localStorage.getItem('token');
+        
+        if (!token || !user._id) {
+            window.location.href = '/';
+            return;
+        }
+
+        // Verify token is valid
+        try {
+            await axios.get('/api/auth/profile');
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/';
+                return;
+            }
+            throw error;
+        }
+
+        state.user = user;
+        
+        // Display user name
+        document.getElementById('userName').textContent = user.name;
+
+        // Setup logout
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user'); 
+            window.location.href = '/';
+        });
+
+        // Load data
+        await Promise.all([
+            loadProducts(),
+            loadCategories(),
+            loadTables()
+        ]);
+        
+        setupEventListeners();
+        updateUI();
+    } catch (error) {
+        console.error('Initialization error:', error);
+        alert('Có lỗi xảy ra khi khởi tạo ứng dụng. Vui lòng thử lại.');
     }
-    state.user = user;
-    
-    // Display user name
-    document.getElementById('userName').textContent = user.name;
-
-    // Setup logout
-    document.getElementById('btnLogout').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/';
-    });
-
-    // Load data
-    await Promise.all([
-        loadProducts(),
-        loadCategories(),
-        loadTables()
-    ]);
-    
-    setupEventListeners();
-    updateUI();
 });
 
 // Load data from API

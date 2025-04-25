@@ -4,12 +4,28 @@ let currentUser = null;
 // Initialize dashboard
 async function initializeDashboard() {
     try {
-        // Check if user is admin or manager
+        // Check if user is logged in and has valid role
         const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+        const token = localStorage.getItem('token');
+        
+        if (!token || !user._id || (user.role !== 'admin' && user.role !== 'manager')) {
             window.location.href = '/staff/pos.html';
             return;
         }
+
+        // Verify token is valid
+        try {
+            await axios.get('/api/auth/profile');
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/';
+                return;
+            }
+            throw error;
+        }
+
         currentUser = user;
 
         // Load user info

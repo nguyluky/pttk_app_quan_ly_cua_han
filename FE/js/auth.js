@@ -207,15 +207,21 @@ const handleLogout = () => {
 
 // Redirect user based on role
 const redirectToUserDashboard = (role) => {
+    if (!role) {
+        handleLogout();
+        return;
+    }
+
     switch (role) {
         case 'admin':
+        case 'manager':
             window.location.href = '/admin/dashboard.html';
             break;
-        case 'manager':
         case 'staff':
             window.location.href = '/staff/pos.html';
             break;
         default:
+            console.error('Invalid role:', role);
             alert('Vai trò không hợp lệ');
             handleLogout();
     }
